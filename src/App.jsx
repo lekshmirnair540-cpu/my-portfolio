@@ -1,200 +1,556 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
+import Scene3D from "./components/Scene3D";
 import "./App.css";
 
+const skills = [
+  {
+    title: "Programming",
+    items: ["Java", "Python", "C++", "SQL"],
+  },
+  {
+    title: "Cloud & DevOps",
+    items: [
+      "AWS",
+      "Microsoft Azure",
+      "Docker",
+      "Docker Compose",
+      "Ansible",
+      "CI/CD",
+      "GitHub Actions",
+    ],
+  },
+  {
+    title: "Networking & Linux",
+    items: [
+      "Linux",
+      "Ubuntu",
+      "Red Hat",
+      "Nginx",
+      "Apache",
+      "IP Addressing",
+      "Cisco Packet Tracer",
+    ],
+  },
+  {
+    title: "Cybersecurity",
+    items: [
+      "Burp Suite",
+      "OWASP Juice Shop",
+      "IAM",
+      "Access Control",
+      "Web Vulnerability Testing",
+    ],
+  },
+  {
+    title: "AI & Data Science",
+    items: [
+      "Machine Learning",
+      "NLP",
+      "OpenCV",
+      "NumPy",
+      "Pandas",
+      "TF-IDF",
+      "Text Classification",
+    ],
+  },
+  {
+    title: "Tools & Technologies",
+    items: [
+      "Git",
+      "GitHub",
+      "Google Colab",
+      "MySQL",
+      "Flask",
+      "Matplotlib",
+    ],
+  },
+];
+
+const projects = [
+  {
+    number: "01",
+    title: "Healthcare Appointment Booking System",
+    category: "Cloud & DevSecOps",
+    description:
+      "A healthcare appointment platform with patient, doctor and admin roles. Developed using Flask and deployed on AWS EC2 with Docker, Nginx, HTTPS and CI/CD automation.",
+    technologies: [
+      "Python",
+      "Flask",
+      "AWS",
+      "Docker",
+      "GitHub Actions",
+    ],
+  },
+  {
+    number: "02",
+    title: "Face Mask Segmentation",
+    category: "Digital Image Processing",
+    description:
+      "An image processing project exploring face mask segmentation using Otsu thresholding, HSV and GrabCut techniques on a dataset of 222 images.",
+    technologies: [
+      "Python",
+      "OpenCV",
+      "NumPy",
+      "Image Processing",
+    ],
+    link: "https://github.com/lekshmirnair540-cpu/-face-mask-segmentation-dip",
+  },
+  {
+    number: "03",
+    title: "Food Craving and Preference Detector",
+    category: "Natural Language Processing",
+    description:
+      "An NLP project that analyzes food preferences and predicts cuisine categories using TF-IDF and Logistic Regression.",
+    technologies: ["Python", "Pandas", "NLP", "TF-IDF"],
+  },
+  {
+    number: "04",
+    title: "Library Management System",
+    category: "Software Development",
+    description:
+      "A Java and MySQL application designed to manage library records and book management operations.",
+    technologies: ["Java", "MySQL"],
+  },
+];
+
+function SectionHeading({ number, title, subtitle }) {
+  return (
+    <div className="section-heading">
+      <span className="section-number">{number}</span>
+      <div>
+        <h2>{title}</h2>
+        <p>{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
+function ProfilePhoto() {
+  const [imageLoaded, setImageLoaded] = useState(true);
+
+  return (
+    <div className="profile-frame">
+      <div className="profile-orbit orbit-one" />
+      <div className="profile-orbit orbit-two" />
+
+      {imageLoaded ? (
+        <img
+          src="/profile.jpeg"
+          alt="Lekshmi R Nair"
+          className="profile-image"
+          onError={() => setImageLoaded(false)}
+        />
+      ) : (
+        <div className="profile-fallback">
+          <span>LRN</span>
+          <p>Profile photo not found</p>
+          <small>Place profile.jpeg inside public folder</small>
+        </div>
+      )}
+
+      <div className="photo-label">
+        <span>LEKSHMI R NAIR</span>
+        <small>Technology Enthusiast</small>
+      </div>
+    </div>
+  );
+}
+
 function App() {
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
-
-  const certificates = [
-    {
-      title: "AI-Integrated Cloud, DevOps & Cybersecurity",
-      issuer: "IPSR Solutions Limited",
-      date: "May 2026",
-      image: "/certificates/ipsr-ai-cloud-devops-cybersecurity-30-hours.jpg",
-      category: "Technical",
-    },
-    {
-      title: "8 Weeks Internship – Cloud, DevOps & Cybersecurity",
-      issuer: "IPSR Solutions Limited",
-      date: "June 2026",
-      image: "/certificates/ipsr-cloud-devops-cybersecurity-internship.jpg",
-      category: "Internship",
-    },
-    {
-      title: "Getting Started with OpenShift AI for Future Careers",
-      issuer: "Red Hat & IPSR Solutions",
-      date: "April 2026",
-      image: "/certificates/redhat-openshift-ai-webinar.jpg",
-      category: "Technical",
-    },
-    {
-      title: "Automate IT the Smart Way with Ansible",
-      issuer: "Red Hat & IPSR Solutions",
-      date: "May 2026",
-      image: "/certificates/redhat-ansible-webinar.jpg",
-      category: "Technical",
-    },
-    {
-      title: "Introduction to Digital Marketing",
-      issuer: "Simplilearn SkillUp",
-      date: "July 2026",
-      image: "/certificates/simplilearn-digital-marketing.jpg",
-      category: "Course",
-    },
-    {
-      title: "Viksit Bharat Young Leaders Dialogue",
-      issuer: "Ministry of Youth Affairs & Sports",
-      date: "September 2026",
-      image: "/certificates/viksit-bharat-young-leaders-dialogue.png",
-      category: "Participation",
-    },
-    {
-      title: "Sadgamaya '25 – Nakshatra Sandhya",
-      issuer: "Angels' Village, Ponkunnam",
-      date: "January 2025",
-      image: "/certificates/sadgamaya-cultural-participation.png",
-      category: "Participation",
-    },
-    {
-      title: "Responsible Computing Challenge",
-      issuer: "Mozilla & Marian College",
-      date: "February 2025",
-      image: "/certificates/mozilla-responsible-computing-appreciation.jpg",
-      category: "Appreciation",
-    },
-    {
-      title: "Blood Donation Certificate",
-      issuer: "Kerala State Blood Transfusion Council",
-      date: "November 2025",
-      image: "/certificates/blood-donation-certificate.jpg",
-      category: "Volunteering",
-    },
-    {
-      title: "Organisational Contribution – Adventure Sports Club",
-      issuer: "Marian College Kuttikkanam",
-      date: "2025",
-      image: "/certificates/adventure-sports-club-appreciation.jpg",
-      category: "Leadership",
-    },
-  ];
-
-  const projects = [
-    {
-      title: "Healthcare Appointment Booking System",
-      description:
-        "A DevSecOps capstone project featuring patient, doctor and admin roles, secure authentication, appointment management and cloud deployment.",
-      technologies: "Python · Flask · AWS · Docker · GitHub Actions",
-    },
-    {
-      title: "Face Mask Segmentation",
-      description:
-        "An image processing project using segmentation techniques such as Otsu thresholding, HSV and GrabCut, evaluated using IoU and Dice score.",
-      technologies: "Python · OpenCV · NumPy",
-      link: "https://github.com/lekshmirnair540-cpu/-face-mask-segmentation-dip",
-    },
-    {
-      title: "Food Craving and Preference Detector",
-      description:
-        "An NLP-based project that analyses food preferences and predicts cuisine categories using text processing and machine learning.",
-      technologies: "Python · NLP · TF-IDF · Logistic Regression",
-    },
-    {
-      title: "Library Management System",
-      description:
-        "A Java-based application designed to manage library records and book-related operations using a database.",
-      technologies: "Java · MySQL",
-    },
-  ];
-
-  const skills = [
-    {
-      title: "Programming",
-      items: ["Python", "Java", "C++", "SQL"],
-    },
-    {
-      title: "Cloud & DevOps",
-      items: ["AWS", "Azure", "Docker", "Ansible", "CI/CD", "GitHub Actions"],
-    },
-    {
-      title: "Networking & Linux",
-      items: ["Linux", "Ubuntu", "RHEL", "Nginx", "IP Addressing", "Cisco Packet Tracer"],
-    },
-    {
-      title: "AI & Machine Learning",
-      items: ["NLP", "OpenCV", "NumPy", "Pandas", "Text Classification", "Image Processing"],
-    },
-    {
-      title: "Cybersecurity",
-      items: ["Burp Suite", "OWASP Juice Shop", "Access Control", "Security Testing"],
-    },
-    {
-      title: "Database & Tools",
-      items: ["MySQL", "Git", "GitHub", "Google Colab", "VS Code"],
-    },
-  ];
-
   return (
     <div className="portfolio">
 
       {/* NAVIGATION */}
       <nav className="navbar">
         <a href="#home" className="logo">
-          LEKSHMI<span>.</span>
+          L<span>.</span>R
         </a>
 
         <div className="nav-links">
-          <a href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#skills">Skills</a>
           <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
-          <a href="#certificates">Certificates</a>
-          <a href="#contact">Contact</a>
+          <a href="#education">Education</a>
+          <a href="#contact" className="nav-contact">
+            Contact
+          </a>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="hero" id="home">
-        <div className="hero-content">
-          <p className="hero-subtitle">HELLO, I'M</p>
+      <main>
 
-          <h1 className="hero-title">
-            Lekshmi R Nair
-          </h1>
+        {/* HERO SECTION */}
+        <section className="hero" id="home">
+          <div className="hero-content">
+            <span className="hero-greeting">HELLO, I'M</span>
 
-          <h2>
-            BCA (Honours) Student | IT Fresher
-          </h2>
+            <h1 className="hero-title">
+              Lekshmi R
+              <span>Nair.</span>
+            </h1>
 
-          <p className="hero-description">
-            Passionate about Cloud Computing, DevOps, Cybersecurity
-            and Artificial Intelligence. I enjoy learning new technologies
-            and building practical solutions.
-          </p>
+            <h2 className="hero-role">
+              BCA (Honours) Student
+              <span>Cloud • DevOps • AI/ML</span>
+            </h2>
 
-          <div className="hero-buttons">
-            <a href="#projects" className="primary-btn">
-              Explore My Work
-            </a>
+            <p className="hero-description">
+              Passionate about building technology-driven
+              solutions through cloud computing, software
+              development, cybersecurity and artificial
+              intelligence.
+            </p>
 
-            <a href="#contact" className="secondary-btn">
-              Contact Me
-            </a>
+            <div className="hero-buttons">
+              <a href="#projects" className="button button-dark">
+                Explore My Work
+              </a>
+
+              <a href="#contact" className="button button-outline">
+                Get In Touch
+              </a>
+            </div>
+
+            <div className="hero-socials">
+              <a
+                href="https://github.com/lekshmirnair540-cpu"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub ↗
+              </a>
+
+              <a
+                href="https://linkedin.com/in/lekshmi-r-nair-7a679b330"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn ↗
+              </a>
+
+              <a href="mailto:lekshmirnair540@gmail.com">
+                Email ↗
+              </a>
+            </div>
           </div>
 
-          <div className="social-links">
+          <div className="hero-visual">
+            <ProfilePhoto />
+
+            <div className="scene-wrapper">
+              <Scene3D />
+            </div>
+
+            <span className="floating-tag tag-one">
+              Cloud Computing
+            </span>
+
+            <span className="floating-tag tag-two">
+              Artificial Intelligence
+            </span>
+          </div>
+
+          <a href="#about" className="scroll-indicator">
+            SCROLL TO EXPLORE ↓
+          </a>
+        </section>
+
+        {/* ABOUT SECTION */}
+        <section className="section about-section" id="about">
+          <SectionHeading
+            number="01"
+            title="About Me"
+            subtitle="A little introduction"
+          />
+
+          <div className="about-content">
+            <div className="about-text">
+              <h3>
+                Learning today.
+                <span> Building tomorrow.</span>
+              </h3>
+
+              <p>
+                I am a BCA (Honours) student at Marian College
+                Kuttikkanam, with a strong interest in cloud
+                computing, DevOps, cybersecurity and artificial
+                intelligence.
+              </p>
+
+              <p>
+                I completed an 8-week, 240-hour industry
+                internship in AI-Integrated Cloud, DevOps and
+                Cybersecurity at IPSR Solutions Limited.
+              </p>
+
+              <p>
+                I enjoy learning new technologies, solving
+                practical problems and developing projects that
+                connect academic knowledge with real-world
+                applications.
+              </p>
+
+              <a
+                href="https://github.com/lekshmirnair540-cpu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                Explore my GitHub projects ↗
+              </a>
+            </div>
+
+            <div className="stats-grid">
+              <div className="stat-card">
+                <strong>240+</strong>
+                <span>Internship Hours</span>
+              </div>
+
+              <div className="stat-card">
+                <strong>13</strong>
+                <span>Hands-on Labs</span>
+              </div>
+
+              <div className="stat-card">
+                <strong>88%</strong>
+                <span>Internship Score</span>
+              </div>
+
+              <div className="stat-card">
+                <strong>2027</strong>
+                <span>Graduation</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SKILLS SECTION */}
+        <section className="section skills-section" id="skills">
+          <SectionHeading
+            number="02"
+            title="Technical Skills"
+            subtitle="Technologies and tools I work with"
+          />
+
+          <div className="skills-grid">
+            {skills.map((skill) => (
+              <article className="skill-card" key={skill.title}>
+                <h3>{skill.title}</h3>
+
+                <div className="skill-tags">
+                  {skill.items.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* EXPERIENCE SECTION */}
+        <section className="section" id="experience">
+          <SectionHeading
+            number="03"
+            title="Experience"
+            subtitle="My professional learning journey"
+          />
+
+          <article className="experience-card">
+            <div className="experience-top">
+              <div>
+                <span className="experience-label">
+                  INTERNSHIP
+                </span>
+
+                <h3>
+                  AI-Integrated Cloud, DevOps & Cybersecurity
+                </h3>
+
+                <h4>IPSR Solutions Limited</h4>
+              </div>
+
+              <span className="experience-date">
+                April – June 2026
+              </span>
+            </div>
+
+            <p>
+              Completed an 8-week, 240-hour industry-oriented
+              internship involving practical cloud, DevOps and
+              cybersecurity training.
+            </p>
+
+            <ul>
+              <li>
+                Completed 13 hands-on labs and a live capstone
+                project.
+              </li>
+              <li>
+                Practised AWS, Linux, Docker, Ansible and CI/CD
+                workflows.
+              </li>
+              <li>
+                Worked with cloud/server deployment and
+                infrastructure automation.
+              </li>
+              <li>
+                Practised SQL injection and XSS security testing.
+              </li>
+              <li>
+                Achieved 5th rank in the internship batch with
+                an 88% score.
+              </li>
+            </ul>
+          </article>
+        </section>
+
+        {/* PROJECTS SECTION */}
+        <section className="section projects-section" id="projects">
+          <SectionHeading
+            number="04"
+            title="Featured Projects"
+            subtitle="Some things I have built and explored"
+          />
+
+          <div className="projects-grid">
+            {projects.map((project) => (
+              <article
+                className="project-card"
+                key={project.number}
+              >
+                <div className="project-top">
+                  <span className="project-number">
+                    {project.number}
+                  </span>
+
+                  <span className="project-category">
+                    {project.category}
+                  </span>
+                </div>
+
+                <h3>{project.title}</h3>
+
+                <p>{project.description}</p>
+
+                <div className="project-tags">
+                  {project.technologies.map((tech) => (
+                    <span key={tech}>{tech}</span>
+                  ))}
+                </div>
+
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-link"
+                  >
+                    View Project ↗
+                  </a>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* EDUCATION SECTION */}
+        <section className="section education-section" id="education">
+          <SectionHeading
+            number="05"
+            title="Education"
+            subtitle="My academic background"
+          />
+
+          <div className="education-card">
+            <span className="education-year">
+              EXPECTED 2027
+            </span>
+
+            <h3>
+              Bachelor of Computer Applications (Honours)
+            </h3>
+
+            <p>
+              Marian College Kuttikkanam (Autonomous)
+            </p>
+
+            <span className="education-location">
+              Kerala, India
+            </span>
+          </div>
+        </section>
+
+        {/* LEADERSHIP SECTION */}
+        <section className="section leadership-section">
+          <SectionHeading
+            number="06"
+            title="Leadership & Activities"
+            subtitle="Beyond academics"
+          />
+
+          <div className="leadership-grid">
+            <div className="leadership-card">
+              <span>01</span>
+              <h3>Vice President</h3>
+              <p>
+                Adventure Sports Club, Marian College
+                Kuttikkanam
+              </p>
+            </div>
+
+            <div className="leadership-card">
+              <span>02</span>
+              <h3>College Dance Club</h3>
+              <p>
+                Active participation in college activities
+              </p>
+            </div>
+
+            <div className="leadership-card">
+              <span>03</span>
+              <h3>IQAC Representative</h3>
+              <p>
+                Student representation and coordination
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT SECTION */}
+        <section className="section contact-section" id="contact">
+          <span className="section-number">07</span>
+
+          <h2>
+            Let's create <span>something great.</span>
+          </h2>
+
+          <p>
+            I am open to opportunities, collaborations and
+            conversations about technology.
+          </p>
+
+          <a
+            href="mailto:lekshmirnair540@gmail.com"
+            className="button button-gold"
+          >
+            Send Me an Email ↗
+          </a>
+
+          <div className="contact-links">
             <a
               href="https://github.com/lekshmirnair540-cpu"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               GitHub
             </a>
 
             <a
-              href="https://www.linkedin.com/in/lekshmi-r-nair-7a679b330"
+              href="https://linkedin.com/in/lekshmi-r-nair-7a679b330"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               LinkedIn
             </a>
@@ -203,317 +559,22 @@ function App() {
               Email
             </a>
           </div>
-        </div>
+        </section>
 
-        <div className="hero-visual">
-          <div className="profile-frame">
-            <div className="profile-placeholder">
-              <span>LRN</span>
-              <p>LEKSHMI R NAIR</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT */}
-      <section className="section" id="about">
-        <div className="section-heading">
-          <p>GET TO KNOW ME</p>
-          <h2>About Me</h2>
-        </div>
-
-        <div className="about-content">
-          <p>
-            I am a BCA (Honours) student at Marian College Kuttikkanam
-            Autonomous, Kerala, with an interest in Cloud Computing,
-            DevOps, Cybersecurity and AI/ML.
-          </p>
-
-          <p>
-            I completed an 8-week, 240-hour industry internship in
-            AI-Integrated Cloud, DevOps and Cybersecurity at IPSR
-            Solutions Limited. During this internship, I gained
-            practical experience in cloud infrastructure, Linux
-            administration, Docker, Ansible, CI/CD pipelines and
-            security testing.
-          </p>
-
-          <p>
-            I enjoy exploring technology, working on projects and
-            continuously improving my technical and problem-solving skills.
-          </p>
-        </div>
-
-        <div className="stats-grid">
-          <div className="stat-card">
-            <h3>8 Weeks</h3>
-            <p>Industry Internship</p>
-          </div>
-
-          <div className="stat-card">
-            <h3>240 Hours</h3>
-            <p>Practical Training</p>
-          </div>
-
-          <div className="stat-card">
-            <h3>5th Rank</h3>
-            <p>Internship Achievement</p>
-          </div>
-
-          <div className="stat-card">
-            <h3>2027</h3>
-            <p>Expected Graduation</p>
-          </div>
-        </div>
-      </section>
-
-      {/* SKILLS */}
-      <section className="section" id="skills">
-        <div className="section-heading">
-          <p>WHAT I WORK WITH</p>
-          <h2>Technical Skills</h2>
-        </div>
-
-        <div className="skills-grid">
-          {skills.map((skill, index) => (
-            <div className="skill-card" key={index}>
-              <h3>{skill.title}</h3>
-
-              <div className="skill-tags">
-                {skill.items.map((item, i) => (
-                  <span key={i}>{item}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* EXPERIENCE */}
-      <section className="section" id="experience">
-        <div className="section-heading">
-          <p>MY PROFESSIONAL JOURNEY</p>
-          <h2>Experience</h2>
-        </div>
-
-        <div className="experience-card">
-          <div className="experience-top">
-            <h3>Cloud, DevOps & Cybersecurity Intern</h3>
-            <span>April – June 2026</span>
-          </div>
-
-          <h4>IPSR Solutions Limited</h4>
-
-          <p>
-            Completed an 8-week (240-hour) internship focused on
-            AI-Integrated Cloud, DevOps and Cybersecurity.
-          </p>
-
-          <ul>
-            <li>Worked with AWS and Azure cloud infrastructure.</li>
-            <li>Practised Linux server administration and monitoring.</li>
-            <li>Worked with Docker, Ansible and CI/CD pipelines.</li>
-            <li>Explored cybersecurity concepts and vulnerability testing.</li>
-            <li>Worked on a cloud-integrated capstone project.</li>
-            <li>Achieved 5th rank with 88% in the internship batch.</li>
-          </ul>
-        </div>
-      </section>
-
-      {/* PROJECTS */}
-      <section className="section" id="projects">
-        <div className="section-heading">
-          <p>MY RECENT WORK</p>
-          <h2>Projects</h2>
-        </div>
-
-        <div className="projects-grid">
-          {projects.map((project, index) => (
-            <div className="project-card" key={index}>
-              <span className="project-number">
-                0{index + 1}
-              </span>
-
-              <h3>{project.title}</h3>
-
-              <p>{project.description}</p>
-
-              <div className="project-tech">
-                {project.technologies}
-              </div>
-
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="project-link"
-                >
-                  View Project →
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CERTIFICATES */}
-      <section className="section certificates-section" id="certificates">
-        <div className="section-heading">
-          <p>MY LEARNING JOURNEY</p>
-          <h2>Certificates & Achievements</h2>
-          <span>
-            Professional training, technical learning and participation.
-          </span>
-        </div>
-
-        <div className="certificates-grid">
-          {certificates.map((certificate, index) => (
-            <div className="certificate-card" key={index}>
-              <button
-                type="button"
-                className="certificate-image-button"
-                onClick={() => setSelectedCertificate(certificate)}
-                aria-label={`View ${certificate.title}`}
-              >
-                <img
-                  src={certificate.image}
-                  alt={certificate.title}
-                  loading="lazy"
-                />
-                <span className="view-certificate">
-                  View Certificate
-                </span>
-              </button>
-
-              <div className="certificate-info">
-                <span className="certificate-category">
-                  {certificate.category}
-                </span>
-
-                <h3>{certificate.title}</h3>
-
-                <p>{certificate.issuer}</p>
-
-                <small>{certificate.date}</small>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CERTIFICATE POPUP */}
-        {selectedCertificate && (
-          <div
-            className="certificate-modal"
-            onClick={() => setSelectedCertificate(null)}
-          >
-            <button
-              className="close-modal"
-              type="button"
-              onClick={() => setSelectedCertificate(null)}
-              aria-label="Close certificate"
-            >
-              ×
-            </button>
-
-            <div
-              className="certificate-modal-content"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <h3>{selectedCertificate.title}</h3>
-
-              <img
-                src={selectedCertificate.image}
-                alt={selectedCertificate.title}
-              />
-
-              <p>{selectedCertificate.issuer}</p>
-              <small>{selectedCertificate.date}</small>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* ACHIEVEMENTS */}
-      <section className="section" id="achievements">
-        <div className="section-heading">
-          <p>RECOGNITION</p>
-          <h2>Achievements</h2>
-        </div>
-
-        <div className="achievement-card">
-          <img
-            src="/achievements/ipsr-internship-5th-rank-88-percent.jpg"
-            alt="IPSR internship ranking achievement"
-            loading="lazy"
-          />
-
-          <div>
-            <span>IPSR Solutions Limited · 2026</span>
-            <h3>5th Rank in Internship Batch</h3>
-            <p>
-              Secured 5th position with 88% in the Cloud, DevOps
-              and Cybersecurity internship.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* EDUCATION */}
-      <section className="section" id="education">
-        <div className="section-heading">
-          <p>ACADEMIC BACKGROUND</p>
-          <h2>Education</h2>
-        </div>
-
-        <div className="education-card">
-          <h3>BCA (Honours)</h3>
-          <p>Marian College Kuttikkanam Autonomous</p>
-          <span>Kerala · Expected 2027</span>
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section className="section contact-section" id="contact">
-        <div className="section-heading">
-          <p>LET'S CONNECT</p>
-          <h2>Contact Me</h2>
-        </div>
-
-        <p>
-          I am open to opportunities, collaborations and learning
-          experiences in technology.
-        </p>
-
-        <div className="contact-card">
-          <a href="mailto:lekshmirnair540@gmail.com">
-            lekshmirnair540@gmail.com
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/lekshmi-r-nair-7a679b330"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LinkedIn Profile
-          </a>
-
-          <a
-            href="https://github.com/lekshmirnair540-cpu"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub Profile
-          </a>
-        </div>
-      </section>
+      </main>
 
       {/* FOOTER */}
       <footer className="footer">
+        <a href="#home" className="logo">
+          L<span>.</span>R
+        </a>
+
         <p>
           © {new Date().getFullYear()} Lekshmi R Nair.
-          Designed with passion.
+          All rights reserved.
         </p>
+
+        <a href="#home">Back to top ↑</a>
       </footer>
     </div>
   );
